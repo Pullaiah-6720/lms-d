@@ -6,5 +6,5 @@ RUN apt update -y && npm install && npx prisma generate && npm run build
 #RUN npx prisma generate
 #RUN npx prisma db push
 #RUN npm run build
-CMD ["sh", "-c", "npx prisma db push && node build/index.js"]
+CMD [" sh","node build/index.js"]
 

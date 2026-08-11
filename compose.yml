@@ -1,51 +1,35 @@
 services:
-  fr-c:
-    container_name: fr
-    image: img:fr
-    ports:
-      - "80:80"
-    depends_on:
-      - img:fr
-
   postgres:
     container_name: postgres
     image: postgres:15
     ports:
       - "5432:5432"
-    networks:
-      - net
     environment:
       POSTGRES_PASSWORD: admin123
 
-  be-c:
+  be:
+    build: ./api
+    environment:
+      MODE: production
+      PORT: 8080
+      DATABASE_URL: postgresql://postgres:admin123@postgres/postgres
     container_name: be
     image: img:be
     ports:
       - "8080:8080"
-    networks:
-      - net
-    depends_on:
-      - be-img
-
-  be-img:
-    build: ./api
-    image: img:be
-    environment:
-      MODE: production
-      PORT: 8080
-      DATABASE_URL: postgresql://postgres:admin123@postgres:5432/postgres
     depends_on:
       - postgres
-  
-  fr-img:
-    build: ./webapp
-    image: img:fr
-    environment:
-      VITE_API_URL: http://54.252.247.172:8080/api
-    depends_on:
-      - be-c
 
-  networks:
-    net:
-      external: true
+  
+  fr:
+    build:
+      context: ./webapp
+      args:
+        VITE_API_URL: http://13.49.138.59:8080/api
+    container_name: fr
+    image: img:fr
+    ports:
+      - "80:80"
+    depends_on:
+      - be
 
