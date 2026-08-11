@@ -1,0 +1,24 @@
+services:
+  nginx:
+    container_name: fr
+    image:
+    ports:
+      - "80:80"
+  fr-c:
+    container_name: be
+    image: img:br
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin123
+  frontend:
+    build: ./api
+    image: img:fr
+    environment:
+      MODE: production
+      PORT: 8080
+      DATABASE_URL: postgresql://postgres:admin123@postgres:5432/postgres
+      
