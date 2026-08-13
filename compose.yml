@@ -6,6 +6,8 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: admin123
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
   be:
     build: ./api
@@ -25,11 +27,12 @@ services:
     build:
       context: ./webapp
       args:
-        VITE_API_URL: http://13.49.138.59:8080/api
+        VITE_API_URL: http://51.20.85.189:8080/api
     container_name: fr
     image: img:fr
     ports:
       - "80:80"
     depends_on:
       - be
-
+volumes:
+  postgres-data:
